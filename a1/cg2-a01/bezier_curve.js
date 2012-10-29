@@ -44,7 +44,9 @@ define(["util", "vec2", "scene", "point_dragger", "tick_mark"],
 
         this.controlStyle = controlStyle || {  
             width: 2,
-            color: '#cccccc'
+            color: '#666666',
+			radius: 2,
+			partsColor: '#cccccc'
         }
 
 		// draw style of drawing the tick mark
@@ -87,7 +89,7 @@ define(["util", "vec2", "scene", "point_dragger", "tick_mark"],
     // return list of draggers to manipulate this curve
     BezierCurve.prototype.createDraggers = function() {
 
-        var draggerStyle = { radius:4, color: this.controlStyle.color, width:0, fill:true }
+        var draggerStyle = { radius: this.controlStyle.radius, color: this.controlStyle.color, width:0, fill:true }
         var draggers = [];
         
         // create closure and callbacks for dragger
@@ -151,8 +153,7 @@ define(["util", "vec2", "scene", "point_dragger", "tick_mark"],
 		
 		if(this.showControlPolygons){
 			// paint control polygon
-			this.drawPolygon(p0, p1, p2, p3, this.randomColor(), 1);
-			//console.log("control")
+			this.drawPolygon(p0, p1, p2, p3, this.controlStyle.partsColor, 1);
 		}			
 		// step 1
 		//(1-t)*p1 + t*p2;
