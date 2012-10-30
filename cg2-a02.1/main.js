@@ -200,7 +200,7 @@ define(["jquery", "gl-matrix", "util", "webgl-debug",
                     this.triangle.draw(gl, this.prog_vertexColor);
                 };
                 if(this.drawOptions["Cube"]) {
-                    this.cube.draw(gl, this.prog_red);
+                    this.cube.draw(gl, this.prog_vertexColor);
                 };
                 if(this.drawOptions["Band"]) {
                     this.band.draw(gl, this.prog_red);

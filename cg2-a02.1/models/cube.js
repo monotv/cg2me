@@ -116,8 +116,22 @@ define(["util", "vbo"],
 			20,21, 21,22, 22,20,
 			20,22, 22,23, 23,20
 		];
-        this.numIndices = coords.length;
 		
+		var triangles = [
+			0,1,2,
+			0,2,3,
+			4,5,6,
+			4,6,7,
+			8,9,10,
+			8,10,11,
+			12,13,14,
+			12,14,15,
+			16,17,18,
+			16,18,19,
+			20,21,22,
+			20,22,23
+		];	
+		this.numIndices = triangles.length;
 		
         // create vertex buffer object (VBO) for the coordinates
         this.coordsBuffer = new vbo.Attribute(gl, { "numComponents": 3,
@@ -126,15 +140,24 @@ define(["util", "vbo"],
                                                   });
 			  
         // create vertex buffer object (VBO) for the lines
-        this.lineBuffer = new vbo.Indices(gl, { "indices": lines});		
+        this.lineBuffer = new vbo.Indices(gl, {"indices": triangles});		
 		
-		// generate colors and store in an array 
-		var colors = [1.0,0.0,0.0,1.0,
-					  1.0,1.0,0.0,1.0,
-					  1.0,1.0,1.0,1.0,
-					  1.0,0.0,0.0,1.0,
-					  1.0,1.0,0.0,1.0,
-					  1.0,1.0,1.0,1.0];
+		// generate colors and store in an array
+		var COLOR_RED 		= [1.0,0.2,0.0,1.0];
+		var COLOR_GREEN 	= [0.302,1.0,0.0,1.0];
+		var COLOR_BLUE		= [0.0,0.8,1.0,1.0];
+		var COLOR_ORANGE 	= [1.0,0.749,0.0,1.0];
+		var COLOR_PINK 		= [1.0,0.0,0.302,1.0];
+		var COLOR_ORANGE	= [1.0,0.902,0.0,1.0];
+		
+		var colors = [
+					  1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0,
+					  1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0,
+					  1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0,
+					  1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0, 1.0,0.0,0.0,1.0,
+					  1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0, 1.0,1.0,0.0,1.0,
+					  1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0, 1.0,1.0,1.0,1.0
+					  ];
 					  
         // create vertex buffer object (VBO) for the colors
         this.colorBuffer = new vbo.Attribute(gl, { "numComponents": 4,
@@ -155,9 +178,8 @@ define(["util", "vbo"],
         // draw the vertices as points
         //gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices());
 		
-		// draw the vertices as lines
-		console.log(gl.TRIANGLES, this.numIndices, gl.UNSIGNED_SHORT, 0)
-        gl.drawElements(gl.LINES, this.numIndices, gl.UNSIGNED_SHORT, 0);
+		// draw the vertices as triangles
+        gl.drawElements(gl.TRIANGLES, this.lineBuffer.numIndices(), gl.UNSIGNED_SHORT, 0);
          
     };
         
