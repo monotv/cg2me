@@ -25,7 +25,7 @@ define(["util", "vbo"],
         var radius   = config.radius   || 1.0;
         var height   = config.height   || 0.1;
         var segments = config.segments || 20;
-        this.asWireframe = config.asWireframe;
+        this.asWireframe = config.asWireframe || false;
         
         window.console.log("Creating a " + (this.asWireframe? "Wireframe " : "") + 
                             "Band with radius="+radius+", height="+height+", segments="+segments ); 
@@ -49,11 +49,38 @@ define(["util", "vbo"],
             
         };  
         
+		// generate our triangles array from the coords
+		var triangles = [];
+		var i = 0;
+		while(i<segments*2){
+			// squares
+			triangles.push(i, i+1, i+2,  i+2, i+1, i+3);
+			// squares between squares
+			triangles.push(i+2, i+3, i+4,  i+4, i+3, i+5);
+			i+=4;
+		}
+		
+		// generate our lines array from the coords
+		var lines = [];
+		i = 0;
+		while(i<segments*2){			
+			lines.push(i,i+1, i+1,i+2, i+2,i);
+			lines.push(i,i+3, i+3,i+2, i+2,i);
+			i+=4;
+		}
+		console.log(lines)	
+		console.log(triangles)					
         // create vertex buffer object (VBO) for the coordinates
         this.coordsBuffer = new vbo.Attribute(gl, { "numComponents": 3,
                                                     "dataType": gl.FLOAT,
                                                     "data": coords 
                                                   } );
+												  
+        // create vertex buffer object (VBO) for the triangles
+        this.triangleBuffer = new vbo.Indices(gl, {"indices": triangles});	
+
+        // create vertex buffer object (VBO) for the lines
+        this.lineBuffer = new vbo.Indices(gl, {"indices": lines});
 
     };
 
@@ -62,11 +89,18 @@ define(["util", "vbo"],
     
         // bind the attribute buffers
         this.coordsBuffer.bind(gl, program, "vertexPosition");
+		this.triangleBuffer.bind(gl);
  
         // draw the vertices as points
-        gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
-         
-
+        //gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices());
+				
+		// draw the vertices as triangles
+		if(this.asWireframe){
+			gl.drawElements(gl.LINES, this.lineBuffer.numIndices(), gl.UNSIGNED_SHORT, 0);
+		} else {
+			gl.drawElements(gl.TRIANGLES, this.triangleBuffer.numIndices(), gl.UNSIGNED_SHORT, 0);	
+		}
+		
     };
         
     // this module only returns the Band constructor function    

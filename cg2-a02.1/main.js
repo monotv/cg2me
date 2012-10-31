@@ -156,12 +156,13 @@ define(["jquery", "gl-matrix", "util", "webgl-debug",
                 // create some objects to be drawn
                 this.triangle = new Triangle(gl);
                 this.cube     = new Cube(gl);
-                this.band     = new Band(gl, { radius: 0.4, height: 0.2, segments: 50 } );
+                this.band     = new Band(gl, { radius: 0.4, height: 0.2, segments: 50, asWireframe: true} );
                 
                 // for the UI - this will be accessed directly by HtmlController
-                this.drawOptions = { "Triangle": true, 
+                this.drawOptions = { "Triangle": false, 
                                      "Cube": false, 
-                                     "Band": false,
+                                     "Band": true,
+									 "As wireframe": true
                                    };
                 
             };
@@ -203,7 +204,8 @@ define(["jquery", "gl-matrix", "util", "webgl-debug",
                     this.cube.draw(gl, this.prog_vertexColor);
                 };
                 if(this.drawOptions["Band"]) {
-                    this.band.draw(gl, this.prog_red);
+					this.band.asWireframe = this.drawOptions["As wireframe"];
+                    this.band.asWireframe ? this.band.draw(gl, this.prog_black) : this.band.draw(gl, this.prog_red);
                 };
             };
             

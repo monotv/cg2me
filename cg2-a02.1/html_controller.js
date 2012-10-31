@@ -36,7 +36,7 @@ define(["jquery"],
 
         // event handler for changes in HTML input elements
         var updateParams = function() {
-        
+
             // toggle animation on/off
             if( $("#anim_Toggle").attr("checked") == undefined ) {
                 animation.stop();
